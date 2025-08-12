@@ -117,21 +117,30 @@ print("Original points convex hull vertices count:", len(vertices_original))
 print("Preprocessed points convex hull vertices count:", len(vertices_preprocessed))
 
 if len(vertices_original) > 0:
-    print("\nConvex hull vertices from original points:")
     hull_points_original = original_points[np.array(vertices_original).flatten()]
-    for i, point in enumerate(hull_points_original):
-        x = float(point[0])
-        y = float(point[1])
-        print(f"  Vertex {i}: ({x:.4f}, {y:.4f})")
+    unique_hull_points_original = np.unique(hull_points_original, axis=0)
+    print(f"\nUnique convex hull vertices from original points: {len(unique_hull_points_original)}")
+    # مرتب‌سازی رأس‌ها بر اساس زاویه برای پیمایش مرتب دور شکل
+    centroid = unique_hull_points_original.mean(axis=0)
+    angles = np.arctan2(unique_hull_points_original[:,1] - centroid[1],
+                        unique_hull_points_original[:,0] - centroid[0])
+    sorted_indices = np.argsort(angles)
+    sorted_points = unique_hull_points_original[sorted_indices]
+    for i, point in enumerate(sorted_points):
+        print(f"  Vertex {i}: ({point[0]:.4f}, {point[1]:.4f})")
 
+# برای hull پیش‌پردازش شده
 if len(vertices_preprocessed) > 0:
-    print("\nConvex hull vertices from preprocessed points:")
     hull_points_preprocessed = extreme_points_array[np.array(vertices_preprocessed).flatten()]
-    for i, point in enumerate(hull_points_preprocessed):
-        x = float(point[0])
-        y = float(point[1])
-        print(f"  Vertex {i}: ({x:.4f}, {y:.4f})")
-
+    unique_hull_points_preprocessed = np.unique(hull_points_preprocessed, axis=0)
+    print(f"\nUnique convex hull vertices from preprocessed points: {len(unique_hull_points_preprocessed)}")
+    centroid = unique_hull_points_preprocessed.mean(axis=0)
+    angles = np.arctan2(unique_hull_points_preprocessed[:,1] - centroid[1],
+                        unique_hull_points_preprocessed[:,0] - centroid[0])
+    sorted_indices = np.argsort(angles)
+    sorted_points = unique_hull_points_preprocessed[sorted_indices]
+    for i, point in enumerate(sorted_points):
+        print(f"  Vertex {i}: ({point[0]:.4f}, {point[1]:.4f})")
 
 if len(vertices_original) == 0 or len(vertices_preprocessed) == 0:
     print("Could not compute convex hull properly.")
