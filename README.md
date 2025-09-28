@@ -1,5 +1,6 @@
 ### Tiling preprocessing algorithm
-##Running the Code
+
+#Running the Code
 
 Install the qhull library and then run
 
